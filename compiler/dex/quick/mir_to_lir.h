@@ -693,6 +693,7 @@ class Mir2Lir {
     void ApplyLoadStoreElimination(LIR* head_lir, LIR* tail_lir);
     void ApplyLoadHoisting(LIR* head_lir, LIR* tail_lir);
     virtual void ApplyLocalOptimizations(LIR* head_lir, LIR* tail_lir);
+    virtual void ApplyArchOptimizations(LIR*, LIR*, BasicBlock*) { return; }
 
     // Shared by all targets - implemented in ralloc_util.cc
     int GetSRegHi(int lowSreg);
@@ -1350,6 +1351,9 @@ class Mir2Lir {
      */
     virtual void GenMachineSpecificExtendedMethodMIR(BasicBlock* bb, MIR* mir);
 
+    /* non virtual so it doesn't have to be implemented */
+    virtual void MachineSpecificPreprocessMIR(BasicBlock*, MIR*) { }
+
     /**
      * @brief Lowers the kMirOpSelect MIR into LIR.
      * @param bb The basic block in which the MIR is from.
@@ -1414,6 +1418,9 @@ class Mir2Lir {
     virtual LIR* OpMem(OpKind op, RegStorage r_base, int disp) = 0;
     virtual void OpPcRelLoad(RegStorage reg, LIR* target) = 0;
     virtual LIR* OpReg(OpKind op, RegStorage r_dest_src) = 0;
+    virtual LIR* OpBkpt() {  // not abstract so it doesn't have to be implemeted for other platforms
+                            return NULL;
+                          };
     virtual void OpRegCopy(RegStorage r_dest, RegStorage r_src) = 0;
     virtual LIR* OpRegCopyNoInsert(RegStorage r_dest, RegStorage r_src) = 0;
     virtual LIR* OpRegImm(OpKind op, RegStorage r_dest_src1, int value) = 0;

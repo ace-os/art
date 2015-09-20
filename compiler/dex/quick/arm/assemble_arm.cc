@@ -1082,6 +1082,19 @@ void ArmMir2Lir::InsertFixupBefore(LIR* prev_lir, LIR* orig_lir, LIR* new_lir) {
  */
 #define PADDING_MOV_R5_R5               0x1C2D
 
+uint32_t ArmMir2Lir::ProcessMoreEncodings(const ArmEncodingMap* encoder, int i, uint32_t operand) {
+    LOG(FATAL) << "Bad fmt:" << encoder->field_loc[i].kind << " " << operand;
+    uint32_t value = 0;
+    return value;
+}
+
+const ArmEncodingMap * ArmMir2Lir::GetEncoder(int opcode) {
+    if (opcode < 0 || opcode >= kArmLast)
+      LOG(FATAL) << "invalid opcode " << opcode;
+    const ArmEncodingMap *encoder = &EncodingMap[opcode];
+    return encoder;
+}
+
 uint8_t* ArmMir2Lir::EncodeLIRs(uint8_t* write_pos, LIR* lir) {
   uint8_t* const write_buffer = write_pos;
   for (; lir != nullptr; lir = NEXT_LIR(lir)) {

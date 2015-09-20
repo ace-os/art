@@ -364,6 +364,8 @@ class MIR : public ArenaObject<kArenaAllocMIR> {
 
   MIR* Copy(CompilationUnit *c_unit);
   MIR* Copy(MIRGraph* mir_Graph);
+
+    ExtendedMIR* extraData;
 };
 
 struct SuccessorBlockInfo;
@@ -1273,6 +1275,13 @@ class MIRGraph {
 
   void HandleSSADef(int* defs, int dalvik_reg, int reg_index);
 
+  void CleanupGraphData() QC_WEAK;
+
+  bool SupportMLA() QC_WEAK;
+
+  void SetPassFail() { pass_failed_ = true; }
+  bool PassFailed() { return pass_failed_; }
+
  protected:
   int FindCommonParent(int block1, int block2);
   void ComputeSuccLineIn(ArenaBitVector* dest, const ArenaBitVector* src1,
@@ -1481,6 +1490,11 @@ class MIRGraph {
   friend class TypeInferenceTest;
   friend class QuickCFITest;
   friend class QuickAssembleX86TestBase;
+
+  friend class QCMIRGraph;
+
+  public:
+  QCMIRGraph* qcm;
 };
 
 }  // namespace art

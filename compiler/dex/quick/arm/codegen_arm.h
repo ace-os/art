@@ -271,11 +271,15 @@ class ArmMir2Lir FINAL : public Mir2Lir {
 
     LIR* InvokeTrampoline(OpKind op, RegStorage r_tgt, QuickEntrypointEnum trampoline) OVERRIDE;
     size_t GetInstructionOffset(LIR* lir);
+    void GenMoreMachineSpecificExtendedMethodMIR(BasicBlock* bb, MIR* mir) QC_WEAK;
+    // void MachineSpecificPreprocessMIR(BasicBlock* bb, MIR* mir);
 
     void GenMachineSpecificExtendedMethodMIR(BasicBlock* bb, MIR* mir) OVERRIDE;
 
     bool HandleEasyDivRem(Instruction::Code dalvik_opcode, bool is_div,
                           RegLocation rl_src, RegLocation rl_dest, int lit) OVERRIDE;
+
+    void CleanupCodeGenData() QC_WEAK;
 
   private:
     void GenNegLong(RegLocation rl_dest, RegLocation rl_src);
@@ -351,6 +355,16 @@ class ArmMir2Lir FINAL : public Mir2Lir {
                                  InvokeType type);
 
     void OpPcRelDexCacheArrayAddr(const DexFile* dex_file, int offset, RegStorage r_dest);
+
+    virtual void ApplyArchOptimizations(LIR* head_lir, LIR* tail_lir, BasicBlock* bb) QC_WEAK;
+
+    void CompilerPostInitializeRegAlloc() QC_WEAK;
+    void ArmMir2LirPostInit(ArmMir2Lir* mir_to_lir) QC_WEAK;
+
+    friend class QCArmMir2Lir;
+
+    public:
+    QCArmMir2Lir * qcm2l;
 };
 
 }  // namespace art

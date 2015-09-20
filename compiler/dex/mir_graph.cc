@@ -163,6 +163,8 @@ MIRGraph::~MIRGraph() {
   STLDeleteElements(&m_units_);
 }
 
+void MIRGraph::CleanupGraphData() {
+}
 /*
  * Parse an instruction, return the length of the instruction
  */
@@ -950,6 +952,10 @@ static bool CreateDumpFile(std::string& fname, const char* dir_prefix, NarrowDex
 
   *output = StringPrintf("%s%s", dir_prefix, name.c_str());
   return true;
+}
+
+const char * MIRGraph::GetExtendedMirOpName(int index) {
+    return extended_mir_op_names_[index];
 }
 
 // TODO: use a configurable base prefix, and adjust callers to supply pass name.

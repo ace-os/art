@@ -140,6 +140,10 @@ RegStorage Arm64Mir2Lir::TargetReg(SpecialTargetRegister reg) {
   return res_reg;
 }
 
+void Arm64Mir2Lir::CompilerPostInitializeRegAlloc() {
+    // nothing here
+}
+
 /*
  * Decode the register id. This routine makes assumptions on the encoding made by RegStorage.
  */
@@ -614,6 +618,19 @@ Arm64Mir2Lir::Arm64Mir2Lir(CompilationUnit* cu, MIRGraph* mir_graph, ArenaAlloca
         << " is wrong: expecting " << i << ", seeing "
         << static_cast<int>(Arm64Mir2Lir::EncodingMap[i].opcode);
   }
+
+  qcm2l = nullptr;
+  Arm64Mir2LirPostInit(this);
+}
+
+void Arm64Mir2Lir::CleanupCodeGenData() {
+}
+
+Arm64Mir2Lir::~Arm64Mir2Lir() {
+  CleanupCodeGenData();
+}
+
+void Arm64Mir2Lir::Arm64Mir2LirPostInit(Arm64Mir2Lir*) {
 }
 
 Mir2Lir* Arm64CodeGenerator(CompilationUnit* const cu, MIRGraph* const mir_graph,

@@ -140,6 +140,10 @@ ResourceMask ArmMir2Lir::GetRegMaskCommon(const RegStorage& reg) const {
   return GetRegMaskArm(reg);
 }
 
+void ArmMir2Lir::CompilerPostInitializeRegAlloc() {
+    // nothing here
+}
+
 constexpr ResourceMask ArmMir2Lir::GetRegMaskArm(RegStorage reg) {
   return reg.IsDouble()
       /* Each double register is equal to a pair of single-precision FP registers */
@@ -586,6 +590,18 @@ ArmMir2Lir::ArmMir2Lir(CompilationUnit* cu, MIRGraph* mir_graph, ArenaAllocator*
         << " is wrong: expecting " << i << ", seeing "
         << static_cast<int>(ArmMir2Lir::EncodingMap[i].opcode);
   }
+  qcm2l = nullptr;
+  ArmMir2LirPostInit(this);
+}
+
+ArmMir2Lir::~ArmMir2Lir() {
+  CleanupCodeGenData();
+}
+
+void ArmMir2Lir::CleanupCodeGenData() {
+}
+
+void ArmMir2Lir::ArmMir2LirPostInit(ArmMir2Lir*) {
 }
 
 Mir2Lir* ArmCodeGenerator(CompilationUnit* const cu, MIRGraph* const mir_graph,
@@ -1011,6 +1027,12 @@ void ArmMir2Lir::GenMachineSpecificExtendedMethodMIR(BasicBlock* bb, MIR* mir) {
     default:
       LOG(FATAL) << "Unexpected opcode: " << mir->dalvikInsn.opcode;
   }
+}
+void ArmMir2Lir::GenMoreMachineSpecificExtendedMethodMIR(BasicBlock*, MIR*) {
+    // nothing here
+}
+
+void ArmMir2Lir::ApplyArchOptimizations(LIR*, LIR*, BasicBlock*) {
 }
 
 }  // namespace art

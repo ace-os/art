@@ -301,6 +301,18 @@ static bool CanOptimize(const DexFile::CodeItem& code_item) {
   return code_item.tries_size_ == 0;
 }
 
+
+HOptimization* GetMoreOptimizing(HGraph*,
+                                 const DexCompilationUnit&,
+                                 CompilerDriver*,
+                                 OptimizingCompilerStats*) __attribute__((weak));
+HOptimization* GetMoreOptimizing(HGraph*,
+                                 const DexCompilationUnit&,
+                                 CompilerDriver*,
+                                 OptimizingCompilerStats*) {
+  return nullptr;
+}
+
 static void RunOptimizations(HOptimization* optimizations[],
                              size_t length,
                              PassInfoPrinter* pass_info_printer) {
@@ -656,6 +668,19 @@ Compiler* CreateOptimizingCompiler(CompilerDriver* driver) {
 bool IsCompilingWithCoreImage() {
   const std::string& image = Runtime::Current()->GetImageLocation();
   return EndsWith(image, "core.art") || EndsWith(image, "core-optimizing.art");
+}
+
+// fast compile path
+CompiledMethod* TryFastCompile(CompilerDriver*,
+                               Compiler*,
+                               const DexFile::CodeItem*,
+                               uint32_t,
+                               InvokeType,
+                               uint16_t,
+                               uint32_t,
+                               jobject,
+                               const DexFile&) {
+  return nullptr;
 }
 
 }  // namespace art

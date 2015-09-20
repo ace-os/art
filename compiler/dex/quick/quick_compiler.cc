@@ -488,6 +488,11 @@ static bool CanCompileShorty(const char* shorty, InstructionSet instruction_set)
   return true;
 }
 
+// check certain conditions that we don't want Quick compiler to handle
+bool QuickCompiler::CheckMoreConditions(CompilationUnit*) const {
+  return true;
+}
+
 // Skip the method that we do not support currently.
 bool QuickCompiler::CanCompileMethod(uint32_t method_idx, const DexFile& dex_file,
                                      CompilationUnit* cu) const {

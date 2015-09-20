@@ -1331,6 +1331,11 @@ void HGraph::InlineInto(HGraph* outer_graph, HInvoke* invoke) {
         }
       }
     }
+    // inlining loop
+    if (info_callee != nullptr) {
+      ((ArenaBitVector &)(info_callee->GetBlocks())).ClearAllBits();
+      info_callee->Populate();
+    }
 
     // Do (1), (2), and (3) to `to`.
     to->SetGraph(outer_graph);

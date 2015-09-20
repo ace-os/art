@@ -464,6 +464,10 @@ static bool EvaluateBranch(Instruction::Code opcode, int32_t src1, int32_t src2)
   return is_taken;
 }
 
+bool MIRGraph::SupportMLA() {
+  return true;
+}
+
 /* Do some MIR-level extended basic block optimizations */
 bool MIRGraph::BasicBlockOpt(BasicBlock* bb) {
   if (bb->block_type == kDead) {

@@ -73,6 +73,20 @@ void HInliner::Run() {
   }
 }
 
+// additional check for an inlinable method
+bool HInliner::CanInlineMethod(const DexCompilationUnit& ,
+                                HGraph&,
+                                HInvoke*) const {
+  return false;
+}
+
+// try if we can remove exception checks
+void HInliner::TryRemoveExceptionChecks(const DexCompilationUnit&,
+                                        HGraph&,
+                                        HInvoke*) const {
+    return;
+}
+
 bool HInliner::TryInline(HInvoke* invoke_instruction, uint32_t method_index) const {
   ScopedObjectAccess soa(Thread::Current());
   const DexFile& caller_dex_file = *caller_compilation_unit_.GetDexFile();
